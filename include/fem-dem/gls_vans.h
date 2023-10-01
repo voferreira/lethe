@@ -357,7 +357,7 @@ protected:
   IndexSet                       active_set;
 
   std::shared_ptr<TrilinosWrappers::PreconditionILU> ilu_preconditioner;
-  AffineConstraints<double>                          void_fraction_constraints;
+  AffineConstraints<double>                          &void_fraction_constraints;
 
   const bool   PSPG        = true;
   const bool   SUPG        = true;
