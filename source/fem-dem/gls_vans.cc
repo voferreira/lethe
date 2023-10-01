@@ -324,8 +324,17 @@ GLSVANSSolver<dim>::update_solution_and_constraints()
                                                 nodal_void_fraction_owned,
                                                 system_rhs_void_fraction);
 
+  DoFTools::extract_locally_relevant_dofs(void_fraction_dof_handler,
+                                          locally_relevant_dofs_voidfraction);
+
   void_fraction_constraints.clear();
   active_set.clear();
+  // reinitialize affine constraints
+  void_fraction_constraints.reinit(locally_relevant_dofs_voidfraction);
+
+  // Remake hanging node constraints
+  DoFTools::make_hanging_node_constraints(void_fraction_dof_handler,
+                                          void_fraction_constraints);
   std::vector<bool> dof_touched(void_fraction_dof_handler.n_dofs(), false);
 
   for (const auto &cell : void_fraction_dof_handler.active_cell_iterators())
